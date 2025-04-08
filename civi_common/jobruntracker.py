@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from datetime import timezone
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, lit
 from pyspark.sql.types import StringType, StructType, StructField, TimestampType
@@ -12,7 +13,7 @@ class JobRunTracker:
         self.spark = SparkSession.builder.getOrCreate()
 
     def start_run(self, message: str):
-        start_time = datetime.now(datetime.timezone.utc)
+        start_time = datetime.now(timezone.utc)
 
         schema = StructType([
             StructField("job_id", StringType(), False),
@@ -30,7 +31,7 @@ class JobRunTracker:
         print(f"[{self.job_name}] Job started with ID: {self.job_id}")
 
     def end_run(self, status: str, message: str):
-        end_time = datetime.now(datetime.timezone.utc)
+        end_time = datetime.now(timezone.utc)
         self.spark.sql(f"""UPDATE control.job_run
             SET status = '{status}', end_time = timestamp('{end_time}')
             WHERE job_id = '{self.job_id}'""")
@@ -38,7 +39,7 @@ class JobRunTracker:
         print(f"[{self.job_name}] Job ended with status: {status}")
     
     def update_orphan(self, job_id: str, status: str, message: str):
-        end_time = datetime.now(datetime.timezone.utc)
+        end_time = datetime.now(timezone.utc)
         self.spark.sql(f"""UPDATE control.job_run
             SET status = '{status}', end_time = timestamp('{end_time}', message = '{message}'
             WHERE job_id = '{job_id}'""")
