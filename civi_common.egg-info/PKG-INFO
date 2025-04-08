@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: civi_common
+Version: 0.1.0
+Summary: Common services for working with MSFT Fabric
+Author: Austin Weir
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: datetime
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# civi-common
+Common services for working with Microsoft Fabric
