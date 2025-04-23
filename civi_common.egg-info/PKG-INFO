@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: civi_common
-Version: 0.1.2
+Version: 0.1.3
 Summary: Common services for working with MSFT Fabric
 Author: Austin Weir
 Classifier: Programming Language :: Python :: 3

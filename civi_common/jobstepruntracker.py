@@ -17,7 +17,6 @@ class JobStepRunTracker:
 
     def start_run(self, message: str = None):
         start_time = datetime.now(timezone.utc)
-
         schema = StructType([
             StructField("job_id", StringType(), False),
             StructField("job_step_id", StringType(), False),
@@ -31,13 +30,13 @@ class JobStepRunTracker:
         data = [(self.job_id, self.job_step_id, self.job_step_name, "Running", start_time, None, message)]
         df = self.spark.createDataFrame(data, schema=schema)
 
-        df.write.format("delta").option("mergeSchema", "true").mode("append").saveAsTable("control.job_step_run")
+        df.write.format("delta").option("mergeSchema", "true").mode("append").saveAsTable("cntl_job_step_run")
         print(f"[{self.job_step_name}] Job step started with ID: {self.job_id}")
 
     def end_run(self, status: str, message: str = None):
         end_time = datetime.now(timezone.utc)
         update_query = f"""
-            UPDATE control.job_step_run
+            UPDATE cntl_job_step_run
             SET status = '{status}', end_time = timestamp('{end_time}'){"," if message else ""}
             {"message = '" + message + "'" if message else ""}
             WHERE job_step_id = '{self.job_step_id}'
@@ -48,7 +47,7 @@ class JobStepRunTracker:
     def update_orphan(self, job_step_id: str, status: str, message: str = None):
         end_time = datetime.now(timezone.utc)
         update_query = f"""
-            UPDATE control.job_step_run
+            UPDATE cntl_job_step_run
             SET status = '{status}', end_time = timestamp('{end_time}'){"," if message else ""}
             {"message = '" + message + "'" if message else ""}
             WHERE job_step_id = '{job_step_id}'
