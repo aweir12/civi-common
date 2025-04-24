@@ -31,7 +31,7 @@ class JobStepRunTracker:
         df = self.spark.createDataFrame(data, schema=schema)
 
         df.write.format("delta").option("mergeSchema", "true").mode("append").saveAsTable("cntl_job_step_run")
-        print(f"[{self.job_step_name}] Job step started with ID: {self.job_id}")
+        print(f"[{self.job_step_name}] Job step started with ID: {self.job_step_id}")
 
     def end_run(self, status: str, message: str = None):
         end_time = datetime.now(timezone.utc)
